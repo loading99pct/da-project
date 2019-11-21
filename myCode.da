@@ -110,6 +110,7 @@ def main():
     with open(nodeFile, "r") as f:
         nodeAddrStr = f.read()
         nodeAddrL = nodeAddrStr.split("\n")
+    nodeAddrL = [addr for addr in nodeAddrL if addr != ""]
     assert len(nodeAddrL) > 0, "there must be at least one node (in the format NodeName@IP-Address)"
     addrAssign = AddressAssignment(nodeAddrL)
     
