@@ -1,5 +1,5 @@
 import sys
-from time import time
+import time
 from collections import defaultdict
 
 class Proposer(process):
