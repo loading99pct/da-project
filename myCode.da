@@ -35,7 +35,7 @@ class Proposer(process):
             propNum = (propNum[0] + 1, self)
         send(('Done',), to=acceptors)
         #
-        send(('Finished', 11.9), to=processManager)
+        send(('Finished', logical_clock()), to=processManager)
 
 class Acceptor(process):
     def setup(acceptors:set, proposers:set, quorumsize:int, f:float):
@@ -75,14 +75,15 @@ class Acceptor(process):
             return True
 
 class ProcessManager(process):
-    def setup(totalN): pass
-    def run():
-        count = 0
-        while count < totalN:
-            await(received(('Finished', timeFinished)))
-            count += 1
-            output(f"time finished: {timeFinished}")
 
+    def setup(totalN:int): pass
+
+    def run():
+        await(totalN == 0)
+
+    def receive(msg=(f'Finished', ftime), from_=p):
+        output(f"{p} finished on {ftime}")
+        totalN -= 1
 
 class AddressAssignment:
     def __init__(self, addressL:list):
@@ -120,7 +121,7 @@ def main():
 
     setup(acceptors, (acceptors, proposers, quorum, f))
     setup(proposers, (acceptors, quorum, f, nrounds, timeout, processManager))
-    setup(processManager)
+    setup(processManager, (nproposers,))
     start(processManager)
     start(acceptors)
     start(proposers)
