@@ -3,7 +3,7 @@ from collections import defaultdict
 
 class Proposer(process):
     def setup(acceptors:set, quorumsize:int,
-              f:float, nrounds:int, timeout:float):
+              f:float, nrounds:int, timeout:float, processManager):
         self.propNum = (0, self)          # Current proposal(ballot) number
         self.propVal = self          # Own value to propose
 
@@ -34,6 +34,8 @@ class Proposer(process):
                 output("Failed to Prepare in time, retrying.")
             propNum = (propNum[0] + 1, self)
         send(('Done',), to=acceptors)
+        #
+        send(('Finished', 11.9), to=processManager)
 
 class Acceptor(process):
     def setup(acceptors:set, proposers:set, quorumsize:int, f:float):
@@ -72,6 +74,14 @@ class Acceptor(process):
         else:
             return True
 
+class ProcessManager(process):
+    def setup(totalN): pass
+    def run():
+        count = 0
+        while count < totalN:
+            await(received(('Finished', timeFinished)))
+            count += 1
+            output(f"time finished: {timeFinished}")
 
 
 class AddressAssignment:
@@ -106,7 +116,11 @@ def main():
         nodeAddr = addrAssign.getNextAddress(nodeType="proposer")
         proposers |= new(Proposer, num=1, at=nodeAddr)
 
+    processManager = new(ProcessManager)
+
     setup(acceptors, (acceptors, proposers, quorum, f))
-    setup(proposers, (acceptors, quorum, f, nrounds, timeout))
+    setup(proposers, (acceptors, quorum, f, nrounds, timeout, processManager))
+    setup(processManager)
+    start(processManager)
     start(acceptors)
     start(proposers)
