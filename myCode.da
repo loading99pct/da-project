@@ -35,7 +35,8 @@ class Proposer(process):
             propNum = (propNum[0] + 1, self)
         send(('Done',), to=acceptors)
         #
-        send(('Finished', logical_clock()), to=processManager)
+        clk = logical_clock()
+        send(('Finished', clk), to=processManager)
 
 class Acceptor(process):
     def setup(acceptors:set, proposers:set, quorumsize:int, f:float):
