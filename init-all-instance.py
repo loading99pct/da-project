@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
 		bashCommand = " ".join([
 			"aws ec2 run-instances", 
-			"--image-id ami-04f92f494742c969f",
+			"--image-id ami-034d4e9d666df39fc",
 			"--count 1",
 			"--instance-type t2.micro",
 			"--key-name testKey",
