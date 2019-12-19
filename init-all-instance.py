@@ -36,12 +36,12 @@ if __name__ == "__main__":
 
 		bashCommand = " ".join([
 			"aws ec2 run-instances", 
-			"--image-id ami-08a172111244fdda2",
-			" --count 1",
+			"--image-id ami-04f92f494742c969f",
+			"--count 1",
 			"--instance-type t2.micro",
 			"--key-name testKey",
-			"--subnet-id subnet-494ab347",
-			"--security-group-ids sg-06fa6b3eb7fb213c1",
+			"--subnet-id subnet-dbe62bd5",
+			"--security-group-ids sg-0179f1922c04fe31d",
 			"--region us-east-1",
 			# "--tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=" + nodeName + "},{Key=type,Value=BatchGen}]'", 
 			# "--tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=" + nodeName + "}]'", 
