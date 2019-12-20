@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
 		if not appendQ:
 			with open("./newDaAddr.config", "w") as f:
-				f.writelines(daAddrL + "\n")
+				f.writelines("\n".join(daAddrL))
 		else:
 			with open("./newDaAddr.config", "a") as f:
 				f.writeline(daAddr + "\n")
