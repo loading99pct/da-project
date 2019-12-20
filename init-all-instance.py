@@ -83,7 +83,7 @@ if __name__ == "__main__":
 				f.writelines("\n".join(daAddrL))
 		else:
 			with open("./newDaAddr.config", "a") as f:
-				f.writeline(daAddr + "\n")
+				f.write(daAddr + "\n")
 		
 		# print("output: \n")
 		# print(outputMsg)
