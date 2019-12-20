@@ -6,9 +6,10 @@ import json
 def writeAwsRunInstFile(nodeName: str, fileName: str):
 	with open(fileName, "w") as f:
 		bashOnRun = "\n".join(["#!/bin/bash",
+			"""echo "running" | tee logfile.txt""", 
 			"git clone https://github.com/loading99pct/da-project.git",
-			"chmod 777 ~/da-project/run-node.bash", 
-			"sh ~/da-project/run-node.bash {}".format(nodeName)])
+			"chmod 777 ~/da-project/run-node.bash > changeMode.txt ", 
+			"sh ~/da-project/run-node.bash {} > runShell.txt".format(nodeName)])
 		f.write(bashOnRun)
 
 def parseNewInstFeedbackToIp(outputMsg: str):
