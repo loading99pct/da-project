@@ -88,7 +88,7 @@ class ProcessManager(process):
         await(self.totalN == 0)
         
     def logResult(ftime, timeUsed):
-            with open("~/measure.log", "a") as f:
+            with open("/home/ec2-user/measure.log", "a") as f:
                 toWrite = repr({"nproposers":nproposers,
                     "nacceptors":nacceptors,
                     "nrounds":nrounds,
