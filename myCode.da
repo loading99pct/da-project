@@ -78,17 +78,32 @@ class Acceptor(process):
 
 class ProcessManager(process):
 
-    def setup(totalN:int): 
+    def setup(nproposers,nacceptors,nrounds,timeout): 
         self.beginTime = None
+        self.index = 1
+        self.totalN = nproposers
 
     def run():
         self.beginTime = time.time()
-        await(totalN == 0)
+        await(self.totalN == 0)
+        
+    def logResult(ftime, timeUsed):
+            with open("~/measure.log", "a") as f:
+                toWrite = repr({"nproposers":nproposers,
+                    "nacceptors":nacceptors,
+                    "nrounds":nrounds,
+                    "timeout":timeout,
+                    "ftime":ftime,
+                    "timeUsed":timeUsed})
+                f.write(toWrite + "\n")
 
     def receive(msg=(f'Finished', ftime), from_=p):
         timeUsed = ftime - self.beginTime
         output(f"{p} finished on {ftime}, time used: {timeUsed}")
-        totalN -= 1
+        if self.index == 1:
+            self.logResult(ftime, timeUsed)
+        self.index += 1
+        self.totalN -= 1
 
 class AddressAssignment:
     def __init__(self, addressL:list):
@@ -131,7 +146,7 @@ def main():
 
     setup(acceptors, (acceptors, proposers, quorum, f))
     setup(proposers, (acceptors, quorum, f, nrounds, timeout, processManager))
-    setup(processManager, (nproposers,))
+    setup(processManager, (nproposers,nacceptors,nrounds,timeout))
     start(processManager)
     start(acceptors)
     start(proposers)
