@@ -60,7 +60,7 @@ if __name__ == "__main__":
 			"--count 1",
 			"--instance-type t2.micro",
 			"--key-name testKey",
-			"--subnet-id subnet-dbe62bd5",
+			"--subnet-id subnet-50cf7a5e",
 			"--security-group-ids sg-04a1baf9efa564458",
 			"--region us-east-1",
 			# "--tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=" + nodeName + "},{Key=type,Value=BatchGen}]'", 
