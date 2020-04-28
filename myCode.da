@@ -67,6 +67,9 @@ class Acceptor(process):
         if (n >= maxpromised() and islegal(n, v) and
                 (not some(sent(('TwoAv', _n, _, self))))):
             send(('TwoAv', n, v, self), to=peers)
+            
+    def receive(msg=('AllDone', n)):
+        self.flag = False
 
 
     def maxpromised():
