@@ -106,8 +106,8 @@ class ProcessManager(process):
         self.index += 1
         self.totalN -= 1
             
-    def received(msg=("AllDoneReceived",), from_=p):
-        output(f"AllDoneReceived by{p}")
+    def receive(msg=("AllDoneReceived",), from_=p):
+        output(f"AllDoneReceived by {p}")
 
 class AddressAssignment:
     def __init__(self, addressL:list):
