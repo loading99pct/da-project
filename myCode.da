@@ -7,11 +7,10 @@ class Proposer(process):
               f:float, nrounds:int, timeout:float, processManager):
         self.propNum = (0, self)          # Current proposal(ballot) number
         self.propVal = self          # Own value to propose
-        self.flag=True
 
     def run():
         count = 0
-        while flag and count < nrounds:
+        while count < nrounds:
             work()
             --prepare
             send(('Prepare', propNum, self), to=acceptors)
@@ -39,16 +38,10 @@ class Proposer(process):
         #
         ftime = time.time()
         send(('Finished', ftime), to=processManager)
-    
-    def received(msg=('AllDone', n)):
-        self.flag = False
-        send(("AllDoneReceived", "Proposer"), to=processManager)
-
 
 class Acceptor(process):
-    def setup(acceptors:set, proposers:set, quorumsize:int, f:float, processManager):
+    def setup(acceptors:set, proposers:set, quorumsize:int, f:float):
         self.peers = acceptors | proposers
-        self.flag=True
 
     def run():
         while True:
@@ -71,11 +64,6 @@ class Acceptor(process):
         if (n >= maxpromised() and islegal(n, v) and
                 (not some(sent(('TwoAv', _n, _, self))))):
             send(('TwoAv', n, v, self), to=peers)
-    
-    def received(msg=('AllDone', n)):
-        self.flag = False
-        send(("AllDoneReceived", "Acceptor"), to=processManager)
-
 
     def maxpromised():
         return max(setof(n, sent(('Promise', n, _, _, _))) | {(-2, self)})
@@ -90,7 +78,7 @@ class Acceptor(process):
 
 class ProcessManager(process):
 
-    def setup(nproposers, proposers, nacceptors, acceptors, nrounds, timeout): 
+    def setup(nproposers,nacceptors,nrounds,timeout): 
         self.beginTime = None
         self.index = 1
         self.totalN = nproposers
@@ -114,7 +102,6 @@ class ProcessManager(process):
         output(f"{p} finished on {ftime}, time used: {timeUsed}")
         if self.index == 1:
             self.logResult(ftime, timeUsed)
-            send(('AllDone', 1), to=proposers|acceptors)
         self.index += 1
         self.totalN -= 1
 
@@ -157,9 +144,9 @@ def main():
 
     processManager = new(ProcessManager)
 
-    setup(acceptors, (acceptors, proposers, quorum, f, processManager))
+    setup(acceptors, (acceptors, proposers, quorum, f))
     setup(proposers, (acceptors, quorum, f, nrounds, timeout, processManager))
-    setup(processManager, (nproposers, proposers, nacceptors, acceptors, nrounds, timeout))
+    setup(processManager, (nproposers,nacceptors,nrounds,timeout))
     start(processManager)
     start(acceptors)
     start(proposers)
