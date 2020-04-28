@@ -70,6 +70,7 @@ class Acceptor(process):
             
     def receive(msg=('AllDone', n)):
         self.flag = False
+        send(("AllDoneReceived", "Proposer"), to=processManager)
 
 
     def maxpromised():
