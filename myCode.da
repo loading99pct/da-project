@@ -105,7 +105,7 @@ class ProcessManager(process):
                     "timeUsed":timeUsed})
                 f.write(toWrite + "\n")
 
-    def receive(msg=(f'Finished', ftime), from_=p):
+    def receive(msg=('Finished', ftime), from_=p):
         timeUsed = ftime - self.beginTime
         output(f"{p} finished on {ftime}, time used: {timeUsed}")
         if self.index == 1:
