@@ -39,6 +39,10 @@ class Proposer(process):
         #
         ftime = time.time()
         send(('Finished', ftime), to=processManager)
+    
+    def receive(msg=('AllDone', n)):
+        self.flag = False
+        send(("AllDoneReceived", "Proposer"), to=processManager)
 
 
 class Acceptor(process):
@@ -67,10 +71,10 @@ class Acceptor(process):
         if (n >= maxpromised() and islegal(n, v) and
                 (not some(sent(('TwoAv', _n, _, self))))):
             send(('TwoAv', n, v, self), to=peers)
-            
+    
     def receive(msg=('AllDone', n)):
         self.flag = False
-        send(("AllDoneReceived", "Proposer"), to=processManager)
+        send(("AllDoneReceived", "Acceptor"), to=processManager)
 
 
     def maxpromised():
@@ -115,7 +119,7 @@ class ProcessManager(process):
         self.totalN -= 1
             
     def receive(msg=("AllDoneReceived", source), from_=p):
-        output(f"AllDoneReceived by {p} from {source}")
+        output(f"AllDoneReceived by {p}")
 
 class AddressAssignment:
     def __init__(self, addressL:list):
