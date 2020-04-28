@@ -7,10 +7,11 @@ class Proposer(process):
               f:float, nrounds:int, timeout:float, processManager):
         self.propNum = (0, self)          # Current proposal(ballot) number
         self.propVal = self          # Own value to propose
+        self.flag=True
 
     def run():
         count = 0
-        while count < nrounds:
+        while flag and count < nrounds:
             work()
             --prepare
             send(('Prepare', propNum, self), to=acceptors)
@@ -37,16 +38,22 @@ class Proposer(process):
         send(('Done',), to=acceptors)
         #
         ftime = time.time()
-        output(f"Finished at {ftime}")
         send(('Finished', ftime), to=processManager)
-        
+        # output(f"P flag set {self.flag}")
+    
+    def receive(msg=('AllDone', n)):
+        self.flag = False
+        send(("AllDoneReceived", "Proposer"), to=processManager)
+        output("P flag set")
+
 
 class Acceptor(process):
-    def setup(acceptors:set, proposers:set, quorumsize:int, f:float):
+    def setup(acceptors:set, proposers:set, quorumsize:int, f:float, processManager):
         self.peers = acceptors | proposers
+        self.flag=True
 
     def run():
-        while True:
+        while flag:
             if await(some(
                     received(('TwoAv', n, v, _)),
                     has=(len(setof(a, received(('TwoAv', _n, _v, a)))) >
@@ -57,15 +64,21 @@ class Acceptor(process):
                 break
 
     def receive(msg=('Prepare', n, p)):
-        if n > maxpromised():
+        if self.flag and n > maxpromised():
             vn, vv = max(setof((vpn, vv), sent(('TwoAv', vpn, vv, self))) |
                          {((-1, self), None)})
             send(('Promise', n, vn, vv, self), to=peers)
 
     def receive(msg=('OneC', n, v, p)):
-        if (n >= maxpromised() and islegal(n, v) and
+        if self.flag and (n >= maxpromised() and islegal(n, v) and
                 (not some(sent(('TwoAv', _n, _, self))))):
             send(('TwoAv', n, v, self), to=peers)
+    
+    def receive(msg=('AllDone', n)):
+        self.flag = False
+        send(("AllDoneReceived", "Acceptor"), to=processManager)
+        output("A flag set")
+
 
     def maxpromised():
         return max(setof(n, sent(('Promise', n, _, _, _))) | {(-2, self)})
@@ -80,7 +93,7 @@ class Acceptor(process):
 
 class ProcessManager(process):
 
-    def setup(nproposers,nacceptors,nrounds,timeout): 
+    def setup(nproposers, proposers, nacceptors, acceptors, nrounds, timeout): 
         self.beginTime = None
         self.index = 1
         self.totalN = nproposers
@@ -99,13 +112,18 @@ class ProcessManager(process):
                     "timeUsed":timeUsed})
                 f.write(toWrite + "\n")
 
-    def receive(msg=(f'Finished', ftime), from_=p):
+    def receive(msg=('Finished', ftime), from_=p):
         timeUsed = ftime - self.beginTime
         output(f"{p} finished on {ftime}, time used: {timeUsed}")
         if self.index == 1:
             self.logResult(ftime, timeUsed)
+            send(('AllDone', 1), to=proposers|acceptors)
         self.index += 1
         self.totalN -= 1
+            
+    def receive(msg=("AllDoneReceived", source), from_=p):
+        # output(f"AllDoneReceived by {p}")
+        return
 
 class AddressAssignment:
     def __init__(self, addressL:list):
@@ -146,9 +164,9 @@ def main():
 
     processManager = new(ProcessManager)
 
-    setup(acceptors, (acceptors, proposers, quorum, f))
+    setup(acceptors, (acceptors, proposers, quorum, f, processManager))
     setup(proposers, (acceptors, quorum, f, nrounds, timeout, processManager))
-    setup(processManager, (nproposers,nacceptors,nrounds,timeout))
+    setup(processManager, (nproposers, proposers, nacceptors, acceptors, nrounds, timeout))
     start(processManager)
     start(acceptors)
     start(proposers)
