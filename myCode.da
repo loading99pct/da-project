@@ -51,7 +51,7 @@ class Acceptor(process):
         self.flag=True
 
     def run():
-        while True:
+        while flag:
             if await(some(
                     received(('TwoAv', n, v, _)),
                     has=(len(setof(a, received(('TwoAv', _n, _v, a)))) >
