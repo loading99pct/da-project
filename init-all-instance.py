@@ -25,10 +25,7 @@ Content-Transfer-Encoding: 7bit
 Content-Disposition: attachment; filename="userdata.txt"
 \n"""
 		bashOnRun = "\n".join(["#!/bin/bash",
-			"""echo "running" | tee logfile.txt""", 
-			"git clone https://github.com/loading99pct/da-project.git",
-			"chmod 777 /home/ec2-user/da-project/run-node.bash > changeMode.txt ", 
-			"sh /home/ec2-user/da-project/run-node.bash {} > runShell.txt".format(nodeName)])
+			"""echo "running" | tee logfile.txt"""])
 		f.write(headPart + bashOnRun)
 
 def parseNewInstFeedbackToIp(outputMsg: str):
