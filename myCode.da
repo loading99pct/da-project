@@ -40,7 +40,7 @@ class Proposer(process):
         ftime = time.time()
         send(('Finished', ftime), to=processManager)
     
-    def received(msg=('AllDone', n)):
+    def receive(msg=('AllDone', n)):
         self.flag = False
         send(("AllDoneReceived", "Proposer"), to=processManager)
 
@@ -72,7 +72,7 @@ class Acceptor(process):
                 (not some(sent(('TwoAv', _n, _, self))))):
             send(('TwoAv', n, v, self), to=peers)
     
-    def received(msg=('AllDone', n)):
+    def receive(msg=('AllDone', n)):
         self.flag = False
         send(("AllDoneReceived", "Acceptor"), to=processManager)
 
