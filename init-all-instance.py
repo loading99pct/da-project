@@ -58,7 +58,7 @@ if __name__ == "__main__":
 			"aws ec2 run-instances", 
 			"--image-id ami-031b43d2707408b18",
 			"--count 1",
-			"--instance-type t2.micro",
+			"--instance-type t2.large",
 			"--key-name testKey",
 			"--subnet-id subnet-50cf7a5e",
 			"--security-group-ids sg-04a1baf9efa564458",
