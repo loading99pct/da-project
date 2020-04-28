@@ -40,7 +40,7 @@ class Proposer(process):
         send(('Finished', ftime), to=processManager)
 
 class Acceptor(process):
-    def setup(acceptors:set, proposers:set, quorumsize:int, f:float):
+    def setup(acceptors:set, proposers:set, quorumsize:int, f:float, processManager):
         self.peers = acceptors | proposers
 
     def run():
@@ -78,7 +78,7 @@ class Acceptor(process):
 
 class ProcessManager(process):
 
-    def setup(nproposers,nacceptors,nrounds,timeout): 
+    def setup(nproposers, proposers, nacceptors, acceptors, nrounds, timeout): 
         self.beginTime = None
         self.index = 1
         self.totalN = nproposers
@@ -144,9 +144,9 @@ def main():
 
     processManager = new(ProcessManager)
 
-    setup(acceptors, (acceptors, proposers, quorum, f))
+    setup(acceptors, (acceptors, proposers, quorum, f, processManager))
     setup(proposers, (acceptors, quorum, f, nrounds, timeout, processManager))
-    setup(processManager, (nproposers,nacceptors,nrounds,timeout))
+    setup(processManager, (nproposers, proposers, nacceptors, acceptors, nrounds, timeout))
     start(processManager)
     start(acceptors)
     start(proposers)
