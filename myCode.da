@@ -37,7 +37,9 @@ class Proposer(process):
         send(('Done',), to=acceptors)
         #
         ftime = time.time()
+        output(f"Finished at {ftime}")
         send(('Finished', ftime), to=processManager)
+        
 
 class Acceptor(process):
     def setup(acceptors:set, proposers:set, quorumsize:int, f:float):
