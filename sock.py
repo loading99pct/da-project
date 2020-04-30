@@ -314,7 +314,7 @@ class UdpTransport(SocketTransport):
 # TCP Implementation:
 MAX_TCP_BACKLOG = 10 
 MAX_TCP_CONN = 200 
-TCP_RECV_BUFFER_SIZE = 256 
+TCP_RECV_BUFFER_SIZE = 256 * 2
 TCP_DEFAULT_TIMEOUT = 5
 #
 # Authentication stuff
