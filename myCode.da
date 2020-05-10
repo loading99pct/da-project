@@ -118,7 +118,7 @@ class ProcessManager(process):
         if self.index == 1:
             self.logResult(ftime, timeUsed)
             send(('AllDone', 1), to=proposers|acceptors)
-            end(proposers|acceptors)
+            # end(proposers|acceptors)
         self.index += 1
         self.totalN -= 1
             
@@ -171,3 +171,6 @@ def main():
     start(processManager)
     start(acceptors)
     start(proposers)
+    
+    await(10)
+    end(proposers|acceptors)
