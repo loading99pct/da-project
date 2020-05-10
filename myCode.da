@@ -162,4 +162,5 @@ def main():
             output("Main: waiting")
     finally:
         output("Ending processes")
-        end(proposers | acceptors | set(processManager))
+        end(proposers | acceptors)
+        end(set(processManager))
