@@ -172,4 +172,5 @@ def main():
     start(acceptors)
     start(proposers)
     
+    time.sleep(5)
     end(proposers|acceptors)
