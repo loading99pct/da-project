@@ -97,7 +97,7 @@ class ProcessManager(process):
                     "nacceptors":nacceptors,
                     "nrounds":nrounds,
                     "timeout":timeout,
-                    "endTime":ftime, # use endTime - beginTime for a more precise result
+                    "endTime":ftime,
                     "estimateTimeUsed":timeUsed})
                 f.write(toWrite + "\n")
 
@@ -117,7 +117,19 @@ class AddressAssignment:
         addrPointer = self.__pointerDict[nodeType]
         self.__pointerDict[nodeType] = (addrPointer + 1) % len(self.__addressL)
         return self.__addressL[addrPointer]
-
+     
+     
+def allDoneQ(measurementId):
+    lastline = None
+    try:
+        with open("/home/ec2-user/measure.log", "r") as f:
+            lastline = [l.strip() for l in f.readlines()][-1]
+            dictRes = ast.literal_eval(lastline)
+            return dictRes["measurementId"] == measurementId and len(dictRes) > 2
+    except:
+        return False
+        
+        
 def main():
     nproposers = int(sys.argv[1]) if len(sys.argv) > 1 else 5
     nacceptors = int(sys.argv[2]) if len(sys.argv) > 2 else 10
@@ -166,7 +178,7 @@ def main():
         f.write(toWrite + "\n")
     
     measurementTimeout = 20
-    while time.time() < beginTime + measurementTimeout:
+    while time.time() < beginTime + measurementTimeout and not allDoneQ(measurementId):
         time.sleep(1) 
         output("Main: waiting")
     output("Ending processes")
