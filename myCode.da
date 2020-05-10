@@ -153,7 +153,7 @@ def main():
     
     output("All acceptor and proposer processes initialized.")
     beginTime = time.time()
-    while time.time() < beginTime + 10:
+    while time.time() < beginTime + 1:
         time.sleep(0.5)
         output("Main: waiting")
     output("Ending processes")
