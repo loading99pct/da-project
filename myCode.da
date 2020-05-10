@@ -175,9 +175,10 @@ def main():
     start(processManager)
     start(acceptors)
     start(proposers)
-    
+    """
     global allDoneFlag
     while not allDoneFlag:
         time.sleep(0.5)
         output("Main: waiting")
     end(proposers|acceptors)
+    """
