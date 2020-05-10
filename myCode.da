@@ -1,6 +1,7 @@
 import sys
 import time
 from collections import defaultdict
+import uuid
 
 class Proposer(process):
     def setup(acceptors:set, quorumsize:int,
@@ -79,10 +80,11 @@ class Acceptor(process):
 
 class ProcessManager(process):
 
-    def setup(nproposers,nacceptors,nrounds,timeout): 
+    def setup(nproposers,nacceptors,nrounds,timeout, measurementId): 
         self.beginTime = None
         self.index = 1
         self.totalN = nproposers
+        self.measurementId = measurementId
 
     def run():
         self.beginTime = time.time()
@@ -90,12 +92,13 @@ class ProcessManager(process):
         
     def logResult(ftime, timeUsed):
             with open("/home/ec2-user/measure.log", "a") as f:
-                toWrite = repr({"nproposers":nproposers,
+                toWrite = repr({"measurementId":self.measurementId,
+                    "nproposers":nproposers,
                     "nacceptors":nacceptors,
                     "nrounds":nrounds,
                     "timeout":timeout,
-                    "ftime":ftime,
-                    "timeUsed":timeUsed})
+                    "endTime":ftime, # use endTime - beginTime for a more precise result
+                    "estimateTimeUsed":timeUsed})
                 f.write(toWrite + "\n")
 
     def receive(msg=(f'Finished', ftime), from_=p):
@@ -134,6 +137,8 @@ def main():
     quorum = int(nacceptors/2 + f)
     print(f"props: {nproposers}, acpts: {nacceptors}, rnd: {nrounds}, tmot:{timeout}")
     
+    measurementId = uuid.uuid4()
+    
     acceptors, proposers = set(), set()
     for i in range(nacceptors):
         nodeAddr = addrAssign.getNextAddress(nodeType="acceptor")
@@ -147,13 +152,18 @@ def main():
 
     setup(acceptors, (acceptors, proposers, quorum, f))
     setup(proposers, (acceptors, quorum, f, nrounds, timeout, processManager))
-    setup(processManager, (nproposers,nacceptors,nrounds,timeout))
+    setup(processManager, (nproposers,nacceptors,nrounds,timeout, measurementId))
     start(processManager)
     start(acceptors)
     start(proposers)
     
     output("All acceptor and proposer processes initialized.")
     beginTime = time.time()
+    
+    with open("/home/ec2-user/measure.log", "a") as f:
+        toWrite = repr({"measurementId":measurementId,
+            "beginTime":beginTime})
+        f.write(toWrite + "\n")
     
     measurementTimeout = 20
     while time.time() < beginTime + measurementTimeout:
