@@ -152,7 +152,7 @@ def main():
     quorum = int(nacceptors/2 + f)
     print(f"props: {nproposers}, acpts: {nacceptors}, rnd: {nrounds}, tmot:{timeout}")
     
-    measurementId = uuid.uuid4()
+    measurementId = str(uuid.uuid4())
     
     acceptors, proposers = set(), set()
     for i in range(nacceptors):
