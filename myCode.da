@@ -95,12 +95,10 @@ class Acceptor(process):
 
 class ProcessManager(process):
 
-    def setup(nproposers, proposers, nacceptors, acceptors, nrounds, timeout, allDoneFlag): 
+    def setup(nproposers, proposers, nacceptors, acceptors, nrounds, timeout): 
         self.beginTime = None
         self.index = 1
         self.totalN = nproposers
-        
-        self.allDoneFlag = allDoneFlag
 
     def run():
         self.beginTime = time.time()
@@ -122,8 +120,6 @@ class ProcessManager(process):
         if self.index == 1:
             self.logResult(ftime, timeUsed)
             send(('AllDone', 1), to=proposers|acceptors)
-            # end(proposers|acceptors)
-            self.allDoneFlag.value = True
         self.index += 1
         self.totalN -= 1
             
@@ -172,13 +168,14 @@ def main():
     
     setup(acceptors, (acceptors, proposers, quorum, f, processManager))
     setup(proposers, (acceptors, quorum, f, nrounds, timeout, processManager))
-    allDoneFlag = Value("allDoneFlag", True)
-    setup(processManager, (nproposers, proposers, nacceptors, acceptors, nrounds, timeout, allDoneFlag))
+    setup(processManager, (nproposers, proposers, nacceptors, acceptors, nrounds, timeout))
     start(processManager)
     start(acceptors)
     start(proposers)
     output("All acceptor and proposer processes initialized.")
-    while not bool(allDoneFlag.value):
+    beginTime = time.time()
+    while time.time() < beginTime + 10:
         time.sleep(0.5)
         output("Main: waiting")
+    output("Ending processes")
     end(proposers|acceptors)
