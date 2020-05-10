@@ -1,6 +1,7 @@
 import sys
 import time
 from collections import defaultdict
+from multiprocessing import Value
 
 
 class Proposer(process):
@@ -94,12 +95,12 @@ class Acceptor(process):
 
 class ProcessManager(process):
 
-    def setup(nproposers, proposers, nacceptors, acceptors, nrounds, timeout): 
+    def setup(nproposers, proposers, nacceptors, acceptors, nrounds, timeout, allDoneFlag): 
         self.beginTime = None
         self.index = 1
         self.totalN = nproposers
         
-        self.allDoneFlag = False
+        self.allDoneFlag = allDoneFlag
 
     def run():
         self.beginTime = time.time()
@@ -122,7 +123,7 @@ class ProcessManager(process):
             self.logResult(ftime, timeUsed)
             send(('AllDone', 1), to=proposers|acceptors)
             # end(proposers|acceptors)
-            self.allDoneFlag = True
+            self.allDoneFlag.value = True
         self.index += 1
         self.totalN -= 1
             
@@ -168,15 +169,16 @@ def main():
         proposers |= new(Proposer, num=1, at=nodeAddr)
 
     processManager = new(ProcessManager)
-
+    
+    allDoneFlag = Value("allDoneFlag", True)
     setup(acceptors, (acceptors, proposers, quorum, f, processManager))
     setup(proposers, (acceptors, quorum, f, nrounds, timeout, processManager))
-    setup(processManager, (nproposers, proposers, nacceptors, acceptors, nrounds, timeout))
+    setup(processManager, (nproposers, proposers, nacceptors, acceptors, nrounds, timeout, allDoneFlag))
     start(processManager)
     start(acceptors)
     start(proposers)
     output("All acceptor and proposer processes initialized.")
-    while not processManager.allDoneFlag:
+    while not processManager.allDoneFlag.value:
         time.sleep(0.5)
         output("Main: waiting")
     end(proposers|acceptors)
