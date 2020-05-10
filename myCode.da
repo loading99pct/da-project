@@ -158,9 +158,8 @@ def main():
     measurementTimeout = 20
     try:
         while time.time() < beginTime + measurementTimeout:
-            time.sleep(1)
+            time.sleep(1) 
             output("Main: waiting")
     finally:
         output("Ending processes")
         end(proposers | acceptors)
-        end(set(processManager))
