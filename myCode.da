@@ -177,7 +177,7 @@ def main():
     start(proposers)
     
     global allDoneFlag
-    while allDoneFlag:
+    while not allDoneFlag:
         time.sleep(0.5)
         output("Main: waiting")
     end(proposers|acceptors)
