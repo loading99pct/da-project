@@ -156,10 +156,8 @@ def main():
     beginTime = time.time()
     
     measurementTimeout = 20
-    try:
-        while time.time() < beginTime + measurementTimeout:
-            time.sleep(1) 
-            output("Main: waiting")
-    finally:
-        output("Ending processes")
-        end(proposers | acceptors)
+    while time.time() < beginTime + measurementTimeout:
+        time.sleep(1) 
+        output("Main: waiting")
+    output("Ending processes")
+    end(proposers | acceptors)
