@@ -172,5 +172,4 @@ def main():
     start(acceptors)
     start(proposers)
     
-    await(10)
     end(proposers|acceptors)
