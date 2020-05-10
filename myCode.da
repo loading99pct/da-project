@@ -2,6 +2,8 @@ import sys
 import time
 from collections import defaultdict
 
+allDoneFlag = False
+
 class Proposer(process):
     def setup(acceptors:set, quorumsize:int,
               f:float, nrounds:int, timeout:float, processManager):
@@ -113,12 +115,14 @@ class ProcessManager(process):
                 f.write(toWrite + "\n")
 
     def receive(msg=('Finished', ftime), from_=p):
+        global allDoneFlag
         timeUsed = ftime - self.beginTime
         output(f"{p} finished on {ftime}, time used: {timeUsed}")
         if self.index == 1:
             self.logResult(ftime, timeUsed)
             send(('AllDone', 1), to=proposers|acceptors)
             # end(proposers|acceptors)
+            allDoneFlag = True
         self.index += 1
         self.totalN -= 1
             
@@ -172,5 +176,8 @@ def main():
     start(acceptors)
     start(proposers)
     
-    time.sleep(5)
+    global allDoneFlag
+    while allDoneFlag:
+        time.sleep(0.5)
+        output("Main: waiting")
     end(proposers|acceptors)
