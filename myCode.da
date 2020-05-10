@@ -1,8 +1,6 @@
 import sys
 import time
 from collections import defaultdict
-from multiprocessing import Value
-
 
 class Proposer(process):
     def setup(acceptors:set, quorumsize:int,
@@ -165,13 +163,14 @@ def main():
         proposers |= new(Proposer, num=1, at=nodeAddr)
 
     processManager = new(ProcessManager)
-    
+
     setup(acceptors, (acceptors, proposers, quorum, f, processManager))
     setup(proposers, (acceptors, quorum, f, nrounds, timeout, processManager))
     setup(processManager, (nproposers, proposers, nacceptors, acceptors, nrounds, timeout))
     start(processManager)
     start(acceptors)
     start(proposers)
+    
     output("All acceptor and proposer processes initialized.")
     beginTime = time.time()
     while time.time() < beginTime + 10:
