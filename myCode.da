@@ -38,6 +38,7 @@ class Proposer(process):
         #
         ftime = time.time()
         send(('Finished', ftime), to=processManager)
+        await(False)
 
 class Acceptor(process):
     def setup(acceptors:set, proposers:set, quorumsize:int, f:float):
