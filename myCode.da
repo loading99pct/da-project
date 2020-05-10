@@ -155,7 +155,7 @@ def main():
     output("All acceptor and proposer processes initialized.")
     beginTime = time.time()
     
-    measurementTimeout = 10
+    measurementTimeout = 20
     try:
         while time.time() < beginTime + measurementTimeout:
             time.sleep(1)
