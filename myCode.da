@@ -125,6 +125,7 @@ def allDoneQ(measurementId):
     try:
         with open("/home/ec2-user/measure.log", "r") as f:
             lastline = [l.strip() for l in f.readlines()][-1]
+            print(lastline)
             dictRes = ast.literal_eval(lastline)
             print(dictRes)
             return dictRes["measurementId"] == measurementId and len(dictRes) > 2
