@@ -1,4 +1,5 @@
 import os
+import returncode
 
 DEBUG_MODE = True
 
@@ -52,7 +53,9 @@ def execCmd(cmd: str):
     print(f"Executing Command line: {cmd}")
     if DEBUG_MODE:
         return
-    os.system(cmd)
+    proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+    proc.wait()
+    print(proc.returncode)
 
 
 if __name__ == "__main__":
