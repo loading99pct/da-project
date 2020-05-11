@@ -2,6 +2,8 @@ import sys
 import subprocess
 import json
 
+DEBUG_MODE = False
+
 
 def writeAwsRunInstFile(nodeName: str, fileName: str):
 	with open(fileName, "w") as f:
@@ -24,8 +26,20 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Content-Disposition: attachment; filename="userdata.txt"
 \n"""
-		bashOnRun = "\n".join(["#!/bin/bash",
-			"""echo "running" | tee logfile.txt"""])
+		if DEBUG_MODE:
+			bashOnRun = "\n".join(["#!/bin/bash",
+				"""echo "running" | tee logfile.txt"""])
+		else:
+			bashOnRun = "\n".join(["#!/bin/bash",
+				"sudo yum -y install python3", 
+				"sudo yum -y install git", 
+				"mkdir da", 
+				"cd da",
+				"git clone https://github.com/DistAlgo/distalgo.git ", 
+				"cd ~", 
+				"git clone https://github.com/loading99pct/da-project.git",
+				"chmod 777 /home/ec2-user/da-project/run-node.bash", 
+				"sh /home/ec2-user/da-project/run-node.bash {}".format(nodeName)])
 		f.write(headPart + bashOnRun)
 
 def parseNewInstFeedbackToIp(outputMsg: str):
@@ -40,6 +54,8 @@ if __name__ == "__main__":
 	beginIndex = int(sys.argv[2]) if len(sys.argv) > 2 else 1
 	appendQ = sys.argv[3] if len(sys.argv) > 3 else "n"
 	appendQ = appendQ == "y"
+	
+	AWS_IMAGE_ID = "ami-0892815748fd033a2" if DEBUG_MODE else "ami-0323c3dd2da7fb37d"
 
 	daAddrL = []
 	for i in range(beginIndex, beginIndex + instanceToInitN):
@@ -53,7 +69,7 @@ if __name__ == "__main__":
 
 		bashCommand = " ".join([
 			"aws ec2 run-instances", 
-			"--image-id ami-0892815748fd033a2",
+			f"--image-id {AWS_IMAGE_ID}",
 			"--count 1",
 			"--instance-type t2.2xlarge",
 			"--key-name testKey",
