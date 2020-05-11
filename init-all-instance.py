@@ -33,7 +33,7 @@ Content-Disposition: attachment; filename="userdata.txt"
 			bashOnRun = "\n".join(["#!/bin/bash",
 				"sudo yum -y install python3", 
 				"sudo yum -y install git", 
-				"mkdir da", 
+				"sudo mkdir da > initLog.log", 
 				"cd da",
 				"git clone https://github.com/DistAlgo/distalgo.git ", 
 				"cd ~", 
