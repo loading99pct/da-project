@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-DEBUG_MODE = True
+DEBUG_MODE = False
 
 config = {
     "init": {
