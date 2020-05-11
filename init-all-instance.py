@@ -31,12 +31,6 @@ Content-Disposition: attachment; filename="userdata.txt"
 				"""echo "running" | tee logfile.txt"""])
 		else:
 			bashOnRun = "\n".join(["#!/bin/bash",
-				"sudo yum -y install python3", 
-				"sudo yum -y install git", 
-				"sudo mkdir da > initLog.log", 
-				"cd da",
-				"git clone https://github.com/DistAlgo/distalgo.git ", 
-				"cd ~", 
 				"git clone https://github.com/loading99pct/da-project.git",
 				"chmod 777 /home/ec2-user/da-project/run-node.bash", 
 				"sh /home/ec2-user/da-project/run-node.bash {}".format(nodeName)])
