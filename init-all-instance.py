@@ -49,8 +49,9 @@ if __name__ == "__main__":
 	appendQ = sys.argv[3] if len(sys.argv) > 3 else "n"
 	appendQ = appendQ == "y"
 	
-	AWS_IMAGE_ID = "ami-0892815748fd033a2" if DEBUG_MODE else "ami-0323c3dd2da7fb37d"
-
+	# AWS_IMAGE_ID = "ami-0892815748fd033a2" if DEBUG_MODE else "ami-0323c3dd2da7fb37d"
+	AWS_IMAGE_ID = "ami-0892815748fd033a2"
+	
 	daAddrL = []
 	for i in range(beginIndex, beginIndex + instanceToInitN):
 		bashFileName = f"./inst-bash/NodeBash-{i}.bash"
