@@ -35,9 +35,9 @@ config = {
 # add more data points that need to be measured
 DEFAULT_PROPOSER_NUM = 10
 DEFAULT_MEASUREMENT_TIMEOUT = 600
-REPEAT_NTIMES_PER_DATAPOINT = 3
+REPEAT_NTIMES_PER_DATAPOINT = 2
 
-for nProposer in [30, 50, 100]:
+for nProposer in [30]:
     dataPoint = {
                     "enable": True, 
                     "cmdParameters": f"{DEFAULT_PROPOSER_NUM} {nProposer} 1 1200 {DEFAULT_MEASUREMENT_TIMEOUT}", 
