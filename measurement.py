@@ -79,4 +79,4 @@ if __name__ == "__main__":
                 # repeat the measurement N times
                 for repeatI in range(dataPoint["repeatN"]):
                     cmdParameters = dataPoint["cmdParameters"]
-                    execCmd(f"./da-project/run-manager.bash {cmdParameters}")
+                    execCmd(f"python3 -m da -f -n ManagerNode --message-buffer-size 4096000 -i ./myCode.da {cmdParameters}")
