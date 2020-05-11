@@ -8,7 +8,7 @@ DEBUG_MODE = False
 config = {
     "init": {
         "intitializeSlaveMachines": False, 
-        "slaveMachineN":5
+        "slaveMachineN":1
     },
 
     # a list of measurement parameters
