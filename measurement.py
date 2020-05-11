@@ -8,7 +8,7 @@ DEBUG_MODE = False
 # ------------------------------- Config -------------------------------
 config = {
     "init": {
-        "intitializeSlaveMachines": True, 
+        "intitializeSlaveMachines": False, 
         "slaveMachineN":1
     },
 
@@ -79,4 +79,4 @@ if __name__ == "__main__":
                 # repeat the measurement N times
                 for repeatI in range(dataPoint["repeatN"]):
                     cmdParameters = dataPoint["cmdParameters"]
-                    execCmd(f"python3 -m da -f -n ManagerNode --message-buffer-size 4096000 -i ./myCode.da {cmdParameters}")
+                    execCmd(f"python3 -m da -f -n ManagerNode --message-buffer-size 4096000 -i ./da-project/myCode.da {cmdParameters}")
