@@ -30,10 +30,22 @@ Content-Disposition: attachment; filename="userdata.txt"
 			bashOnRun = "\n".join(["#!/bin/bash",
 				"""echo "running" | tee logfile.txt"""])
 		else:
+# 			bashOnRun = "\n".join(["#!/bin/bash",
+# 				"git clone https://github.com/loading99pct/da-project.git",
+# 				"chmod 777 /home/ec2-user/da-project/run-node.bash", 
+# 				"sh /home/ec2-user/da-project/run-node.bash {}".format(nodeName)])
 			bashOnRun = "\n".join(["#!/bin/bash",
+				"sudo yum -y install python3", 
+				"sudo yum -y install git", 
+				"cd /home/ec2-user", 
+				"mkdir da", 
+				"cd da",
+				"git clone https://github.com/DistAlgo/distalgo.git ", 
+				"cd /home/ec2-user", 
 				"git clone https://github.com/loading99pct/da-project.git",
 				"chmod 777 /home/ec2-user/da-project/run-node.bash", 
 				"sh /home/ec2-user/da-project/run-node.bash {}".format(nodeName)])
+	
 		f.write(headPart + bashOnRun)
 
 def parseNewInstFeedbackToIp(outputMsg: str):
