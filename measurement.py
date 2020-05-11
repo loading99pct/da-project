@@ -3,6 +3,8 @@ import subprocess
 
 DEBUG_MODE = False
 
+
+# ------------------------------- Config -------------------------------
 config = {
     "init": {
         "intitializeSlaveMachines": False, 
@@ -47,10 +49,10 @@ for nProposer in [30]:
     config["measurement"]["dataPoints"].append(dataPoint)
 
 
-
+# ------------------------------- Measure -------------------------------
 
 def execCmd(cmd: str):
-    print(f"Executing Command line: {cmd}")
+    print(f"----------------- Executing Command line: {cmd}")
     if DEBUG_MODE:
         return
     proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
