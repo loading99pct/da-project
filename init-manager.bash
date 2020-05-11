@@ -11,7 +11,7 @@ git clone https://github.com/loading99pct/da-project.git
 chmod 777 ./da-project/run-manager.bash
 mkdir ~/inst-bash
 mkdir ~/.aws
-! echo '' >> /etc/security/limits.conf
-! echo '# <domain> <type> <item>  <value>' >> /etc/security/limits.conf
-! echo '    *       soft  nofile  65535' >> /etc/security/limits.conf
-! echo '    *       hard  nofile  65535' >> /etc/security/limits.conf
+echo '' >> /etc/security/limits.conf
+echo '# <domain> <type> <item>  <value>' >> /etc/security/limits.conf
+echo '    *       soft  nofile  65535' >> /etc/security/limits.conf
+echo '    *       hard  nofile  65535' >> /etc/security/limits.conf
