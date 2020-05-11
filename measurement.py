@@ -1,4 +1,5 @@
 import os
+import time
 import subprocess
 
 DEBUG_MODE = False
@@ -66,6 +67,9 @@ if __name__ == "__main__":
         print("Initializing slave machines")
         slaveMachineN = config["init"]["slaveMachineN"]
         execCmd(f"python3 ./da-project/init-all-instance.py {slaveMachineN}")
+        waitingTime = 120
+        print(f"Waiting {waitingTime} seconds for the slave machines initialization")
+        time.sleep(waitingTime)
 
 
     # do the measurement one by one
