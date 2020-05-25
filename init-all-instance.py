@@ -6,7 +6,7 @@ DEBUG_MODE = False
 
 
 def writeAwsRunInstFile(nodeName: str, fileName: str):
-	with open(fileName, "w") as f:
+	with open(fileName, "w+") as f:
 		headPart = """Content-Type: multipart/mixed; boundary="//"
 MIME-Version: 1.0
 
@@ -99,7 +99,7 @@ if __name__ == "__main__":
 		daAddrL.append(daAddr)
 
 		if not appendQ:
-			with open("~/newDaAddr.config", "w") as f:
+			with open("~/newDaAddr.config", "w+") as f:
 				f.writelines("\n".join(daAddrL) + "\n")
 		else:
 			with open("~/newDaAddr.config", "a") as f:
