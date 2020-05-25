@@ -66,7 +66,7 @@ if __name__ == "__main__":
 	
 	daAddrL = []
 	for i in range(beginIndex, beginIndex + instanceToInitN):
-		bashFileName = f"./inst-bash/NodeBash-{i}.bash"
+		bashFileName = f"~/inst-bash/NodeBash-{i}.bash"
 		nodeName = f"Node-{i}"
 		writeAwsRunInstFile(nodeName, bashFileName)
 
@@ -99,10 +99,10 @@ if __name__ == "__main__":
 		daAddrL.append(daAddr)
 
 		if not appendQ:
-			with open("./newDaAddr.config", "w") as f:
+			with open("~/newDaAddr.config", "w") as f:
 				f.writelines("\n".join(daAddrL) + "\n")
 		else:
-			with open("./newDaAddr.config", "a") as f:
+			with open("~/newDaAddr.config", "a") as f:
 				f.write(daAddr + "\n")
 		
 		# print("output: \n")
