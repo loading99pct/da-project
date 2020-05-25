@@ -66,7 +66,7 @@ if __name__ == "__main__":
     if config["init"]["intitializeSlaveMachines"]:
         print("Initializing slave machines")
         slaveMachineN = config["init"]["slaveMachineN"]
-        execCmd(f"python3 ./da-project/init-all-instance.py {slaveMachineN}")
+        execCmd(f"python3 ~/da-project/init-all-instance.py {slaveMachineN}")
         waitingTime = 120
         print(f"Waiting {waitingTime} seconds for the slave machines initialization")
         time.sleep(waitingTime)
@@ -79,4 +79,4 @@ if __name__ == "__main__":
                 # repeat the measurement N times
                 for repeatI in range(dataPoint["repeatN"]):
                     cmdParameters = dataPoint["cmdParameters"]
-                    execCmd(f"python3 -m da -f -n ManagerNode --message-buffer-size 4096000 -i ./myCode.da {cmdParameters}")
+                    execCmd(f"python3 -m da -f -n ManagerNode --message-buffer-size 4096000 -i ~/da-project/myCode.da {cmdParameters}")
