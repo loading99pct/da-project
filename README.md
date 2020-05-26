@@ -1,19 +1,21 @@
 # da-project
 
-1. init-manager.bash   
-This script is used to install python, distalgo, github and test code in the manager machine.
+ 
 
-2. init-node.bash   
-This script is used to set up the machine where the proposers and acceptors are running. This script is set to be run automatically whenever the machine restart.
+On the Manager machine:  
+  1. init-manager.bash   
+  This script is used to install python, distalgo, github and test code in the manager machine.   
 
-3. run-manager.bash   
-This script is used to run the manager node to measure the total time.
+  2. run-measurement.bash and measurement.py   
+  This script is used to run the manager node to measure the total time. The script will call measurement.py. The measurement.py will execute codes in init-manager.py to launch slave machines before doing any measurement.
 
-4. run-node.bash   
-This script is called by the init-node.bash to run the nodes in that machine on idle mode.
+  3. myCode.da  
+  This is the algorithm to be measured.
+    
+    
+On the Slave Machines:
+  1. run-node.bash   
+  This script is called when the slave machine is launched.
 
-5. myCode.py   
-This is the algorithm to be measured.
-
-6. init-all-instance.py   
-This is used to automatically setup N machines return write the machine information into a log file in the manager machine.
+  2. myCode.da   
+  This is the algorithm to be measured.
