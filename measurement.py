@@ -8,7 +8,7 @@ DEBUG_MODE = False
 # ------------------------------- Config -------------------------------
 config = {
     "init": {
-        "intitializeSlaveMachines": True, 
+        "intitializeSlaveMachines": False, 
         "slaveMachineN":5
     },
 
@@ -41,7 +41,7 @@ DEFAULT_PROPOSER_NUM = 10
 DEFAULT_MEASUREMENT_TIMEOUT = 600
 REPEAT_NTIMES_PER_DATAPOINT = 1
 
-for nProposer in [800, 1600]:
+for nProposer in [100,200,300,400,500]:
     dataPoint = {
                     "enable": True, 
                     "cmdParameters": f"{DEFAULT_PROPOSER_NUM} {nProposer} 1 1200 {DEFAULT_MEASUREMENT_TIMEOUT}", 
