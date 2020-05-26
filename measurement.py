@@ -8,7 +8,7 @@ DEBUG_MODE = False
 # ------------------------------- Config -------------------------------
 config = {
     "init": {
-        "intitializeSlaveMachines": False, 
+        "intitializeSlaveMachines": True, 
         "slaveMachineN":5
     },
 
