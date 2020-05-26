@@ -5,4 +5,4 @@ git clone https://github.com/loading99pct/da-project.git
 export PYTHONPATH="/home/ec2-user/da/distalgo":${PYTHONPATH}
 chmod 777 ./da-project/run-measurement.bash
 # cd ./da-project
-python3 measurement.py
+python3 /home/ec2-user/da-project/measurement.py
